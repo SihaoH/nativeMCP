@@ -63,7 +63,7 @@ cmake .. -G "Visual Studio 17 2022"
 最后打开build/nativeMCP.sln进行编译和调试
 
 ## 配置
-修改[config.json](./host/config.json)，可简单配置RAG服务端的功能
+修改[config.json](./host/config.json)，可简单配置MCP Host的功能
 - model
 	- host：ollama的地址
 	- chat：生成对话的模型，推荐deepseek和qwen
