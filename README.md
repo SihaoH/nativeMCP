@@ -1,9 +1,10 @@
-# nativeRAG
+# nativeMCP
 
 ## 概述
 这是一个由C++编写的MCP系统，包括MCP核心架构的host、client和server
 
 *server可用于其他支持MCP的软件，如Cursor*
+
 *client也支持MCP官方的servers，和Cursor同样的配置即可*
 
 ## 基本组成
