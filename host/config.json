@@ -1,0 +1,15 @@
+{
+    "model": {
+        "host": "http://localhost:11434",
+        "chat": "qwen2.5:7b"
+    },
+    "mcpServers":{
+        "cpp-time": {
+            "command": "cmd",
+            "args": [
+                "/c",
+                "D:\\Projects\\C++\\nativeMCP\\build\\bin\\Debug\\server_time.exe"
+            ]
+        }
+    }
+}

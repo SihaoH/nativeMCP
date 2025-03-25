@@ -25,6 +25,7 @@ set(CMAKE_OUTPUT_INSTALL_INTDIR ${PROJECT_BINARY_DIR}/bin/$<CONFIG>)
 
 add_subdirectory(MCPServer)
 add_subdirectory(servers)
+add_subdirectory(host)
 
 # 安装所依赖的dll（需要在vcvarsall.bat打开的环境下使用）
 set(APP "\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/server.exe")

@@ -1,0 +1,7 @@
+{
+    "name": "native-mcp",
+    "dependencies": [
+        "spdlog",
+        "cpp-httplib"
+    ]
+}
