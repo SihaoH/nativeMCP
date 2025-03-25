@@ -21,8 +21,12 @@ QString MCPClient::request(const QString& msg) const
     process->write(msg.toUtf8());
     process->write("\n");
     process->waitForBytesWritten();
-    process->waitForReadyRead();
-    return process->readAll();
+    QString resp;
+    while (resp.isEmpty()) {
+        process->waitForReadyRead();
+        resp = process->readAll();
+    }
+    return resp;
 }
 
 void MCPClient::init()
