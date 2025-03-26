@@ -15,6 +15,8 @@ Host::Host(QObject *parent)
 
 void Host::init()
 {
+    LOG(info) << "MCP Host初始化";
+
     QFile cfg_file("./config.json");
     if (!cfg_file.open(QIODevice::ReadOnly)) {
         LOG(err) << "Failed to open config file:" << "./config.json";
@@ -42,6 +44,7 @@ void Host::init()
         MCPClient* client = new MCPClient(this);
         client->connectToServer(server_cfg["command"].toString(), server_cfg["args"].toVariant().toStringList());
         if (client->isConnected()) {
+            clientMap.insert(server_name, client);
             log_info.append(server_name + ": \n");
         } else {
             LOG(err) << "无法连接到MCP server: " << server_name;
@@ -54,8 +57,10 @@ void Host::init()
         for (const auto& tool : tools_array) {
             auto tool_obj = tool.toObject();
             auto tool_name = tool_obj["name"].toString();
-            clientMap.insert(tool_name, client);
-            toolMap.insert(tool_name, QJsonDocument(tool_obj).toJson(QJsonDocument::Compact));
+            // 将名称混合成server_name::tool_name的形式，避免冲突
+            auto mix_name = QString("%1::%2").arg(server_name).arg(tool_name);
+            tool_obj["name"] = mix_name;
+            toolMap.insert(mix_name, QJsonDocument(tool_obj).toJson(QJsonDocument::Compact));
             log_info.append(QString("  %1 %2\n").arg(tool_name).arg(tool_obj["description"].toString()));
         }
     }
@@ -96,23 +101,30 @@ void Host::process(const QString& content)
             QJsonArray tool_calls = message_obj["tool_calls"].toArray();
             for (const auto& call : tool_calls) {
                 auto function = call.toObject()["function"].toObject();
-                auto tool_name = function["name"].toString();
+                auto mix_name = function["name"].toString();
                 auto tool_args = QJsonDocument(function["arguments"].toObject()).toJson(QJsonDocument::Compact);
                 
                 // 获取对应的客户端
-                MCPClient* client = clientMap.value(tool_name);
+                auto mix_name_pair = mix_name.split("::");
+                if (mix_name_pair.count() != 2) {
+                    LOG(err) << "工具名称不合法（应该是server_name::tool_name) " << mix_name;
+                    continue;
+                }
+                auto client_name = mix_name_pair[0];
+                auto tool_name = mix_name_pair[1];
+                MCPClient* client = clientMap.value(client_name);
                 if (!client) {
-                    LOG(err) << "Tool not found: " << tool_name;
+                    LOG(err) << "未找到对应的Client: " << client_name;
                     continue;
                 }
                 // 调用工具并获取结果
                 auto tool_result = client->callTool(tool_name, tool_args);
                 tool_result = QJsonDocument::fromJson(tool_result.toUtf8()).object()["content"].toArray()[0].toObject()["text"].toString();
-                LOG(info) << QString("调用MCP工具[%1]: ").arg(tool_name) << tool_result;
+                LOG(info) << QString("调用MCP工具[%1]: ").arg(mix_name) << tool_result;
 
                 messageList.append(QJsonObject{
                     {"role", "tool"},
-                    {"name", tool_name},
+                    {"name", mix_name},
                     {"content", tool_result}
                 });
             }
