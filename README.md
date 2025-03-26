@@ -71,3 +71,55 @@ cmake .. -G "Visual Studio 17 2022"
 	- server名称，可以随便填
 		- command：在windows系统上必须都是`cmd`
 		- args：["/c"]第一个参数必须是`/c`，第二个参数看server的类型选择，exe直接是`exe的路径`，python程序则填`python`，Node.js则填`npx`，后面的参数再根据server的说明来填写
+
+## 示例
+```text
+[2025-03-26 12:27:30.296][info][Host.cpp::18] MCP Host初始化
+[2025-03-26 12:27:30.299][info][ModelAdapter.cpp::22] ModelAdapter初始化：http://localhost:11434, qwen2.5:7b
+[2025-03-26 12:27:30.397][info][Host.cpp::67]
+可用工具列表：
+cpp-time:
+  getCurrentTime 获取当前时间
+  waitTime 等待指定的时间
+server-test:
+  getAvailableIP 获取可用的IP列表
+  sendToIP 将内容发送到指定的ip地址
+  testMultiParams 测试多参数的工具调用
+
+>>> 获取当前时间，并发送给所有可用的ip
+[2025-03-26 12:29:08.349][info][Host.cpp::123] 调用MCP工具[cpp-time::getCurrentTime]: {
+    "datetime": "2025-03-26T12:29:08.346",
+    "timezone": "Asia/Shanghai"
+}
+
+[2025-03-26 12:29:20.160][info][Host.cpp::123] 调用MCP工具[server-test::getAvailableIP]: {
+    "ip_list": [
+        "192.168.1.201",
+        "192.168.1.202",
+        "192.168.1.203"
+    ]
+}
+
+[2025-03-26 12:30:07.784][info][Host.cpp::123] 调用MCP工具[server-test::sendToIP]: {
+    "content": "当前时间为：2025-03-26T12:29:08.346 (Asia/Shanghai)",
+    "ip": "192.168.1.201",
+    "status": "发送成功"
+}
+
+[2025-03-26 12:30:07.788][info][Host.cpp::123] 调用MCP工具[server-test::sendToIP]: {
+    "content": "当前时间为：2025-03-26T12:29:08.346 (Asia/Shanghai)",
+    "ip": "192.168.1.202",
+    "status": "发送成功"
+}
+
+[2025-03-26 12:30:07.789][info][Host.cpp::123] 调用MCP工具[server-test::sendToIP]: {
+    "content": "当前时间为：2025-03-26T12:29:08.346 (Asia/Shanghai)",
+    "ip": "192.168.1.203",
+    "status": "发送成功"
+}
+
+当前时间为：2025-03-26T12:29:08.346 (Asia/Shanghai)
+
+已经将当前时间发送给所有可用的IP地址，发送状态均为成功。
+
+```
