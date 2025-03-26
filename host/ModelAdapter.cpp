@@ -19,6 +19,7 @@ void ModelAdapter::init(const QString& host, const QString& chat_m)
 {
     ollama.reset(new httplib::Client(host.toStdString()));
     chatModel = chat_m;
+    LOG(info) << "ModelAdapter初始化：" << host << ", " << chat_m;
 }
 
 QString ModelAdapter::chat(const QJsonArray& messages, const QStringList& tools)

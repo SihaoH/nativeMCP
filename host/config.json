@@ -10,6 +10,13 @@
                 "/c",
                 "D:\\Projects\\C++\\nativeMCP\\build\\bin\\Debug\\server_time.exe"
             ]
+        },
+        "server-test": {
+            "command": "cmd",
+            "args": [
+                "/c",
+                "D:\\Projects\\C++\\nativeMCP\\build\\bin\\Debug\\server_test.exe"
+            ]
         }
     }
 }
