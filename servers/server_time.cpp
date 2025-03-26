@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QTextStream>
+#include <QThread>
 
 
 ServerTime::ServerTime()
@@ -16,26 +17,50 @@ ServerTime::ServerTime()
 
 QString ServerTime::getCurrentTime(const QVariant& timezone)
 {
-    QTimeZone tz(timezone.toString().toUtf8());
-    if (!tz.isValid()) {
-        setLastCallError(true);
-        return "Invalid timezone specified";
+    auto cur_time = QDateTime::currentDateTime();
+    QTimeZone tz(QTimeZone::LocalTime);
+    if (!timezone.toString().isEmpty()) {
+        tz = QTimeZone(timezone.toString().toUtf8());
+        if (!tz.isValid()) {
+            setLastCallError(true);
+            return "Invalid timezone specified";
+        }
+        cur_time = cur_time.toTimeZone(tz);
     }
-    auto cur_time = QDateTime::currentDateTime().toTimeZone(tz).toString(Qt::ISODateWithMs);
-    QJsonObject ret_obj;
-    ret_obj["timezone"] = QString::fromUtf8(tz.id());
-    ret_obj["datetime"] = cur_time;
+
+    QJsonObject ret_obj{
+        {"timezone", QString::fromUtf8(tz.id())},
+        {"datetime", cur_time.toString(Qt::ISODateWithMs)}
+    };
 
     return QJsonDocument(ret_obj).toJson(QJsonDocument::Indented);
 }
 
-MCPServer::ToolInfo ServerTime::getCurrentTime_info()
+MCPServer::ToolInfo ServerTime::getCurrentTime$info()
 {
     MCPServer::ToolInfo info;
     info.name = "getCurrentTime";
     info.desc = "获取当前时间";
     info.params = QList<MCPServer::ParamInfo>{
-        {"timezone", "string", "IANA时区名称(例如 'America/New_York', 'Europe/London')."}
+        {"timezone", "string", "IANA时区名称(例如'Asia/Shanghai')，可以为空，为空则直接返回系统时间"}
+    };
+    return info;
+}
+
+QString ServerTime::waitTime(const QVariant& sec)
+{
+    auto sec_int = sec.toInt();
+    QThread::sleep(sec_int);
+    return QString("{\"result\": \"已过去%1秒，请继续操作\"}").arg(sec_int);
+}
+
+MCPServer::ToolInfo ServerTime::waitTime$info()
+{
+    MCPServer::ToolInfo info;
+    info.name = "waitTime";
+    info.desc = "等待指定的时间";
+    info.params = QList<MCPServer::ParamInfo>{
+        {"sec", "int", "等待的时间，单位是秒数"}
     };
     return info;
 }

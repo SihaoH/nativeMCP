@@ -29,7 +29,7 @@ public:
 // 子类提供的工具，需要按以下格式定义：
 public slots:
     QString doSomthing(const QVariant& timezone); // 可用的工具/函数，参数必须是QVariant类型，返回值必须是JSON格式的字符串，内容自定
-    MCPServer::ToolInfo doSomthing_info(); // 工具/函数的信息，后缀必须是_info，且无参
+    MCPServer::ToolInfo doSomthing_info(); // 工具/函数的信息，后缀必须是$info，且无参
 */
 
 public:

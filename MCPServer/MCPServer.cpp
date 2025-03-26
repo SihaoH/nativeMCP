@@ -91,7 +91,7 @@ public:
 
             if (tool.methodType() == QMetaMethod::Slot && 
                 tool.access() == QMetaMethod::Public && 
-                tool.name().contains("_info")) {
+                tool.name().contains("$info")) {
                     MCPServer::ToolInfo tool_info;
                     tool.invoke(d, Qt::DirectConnection, qReturnArg(tool_info));
                     tools.append(tool_info);

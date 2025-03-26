@@ -11,5 +11,8 @@ public:
 
 public slots:
     QString getCurrentTime(const QVariant& timezone);
-    MCPServer::ToolInfo getCurrentTime_info();
+    MCPServer::ToolInfo getCurrentTime$info();
+
+    QString waitTime(const QVariant& sec);
+    MCPServer::ToolInfo waitTime$info();
 };
