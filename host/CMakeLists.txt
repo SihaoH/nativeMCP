@@ -35,3 +35,13 @@ add_custom_command(
     TARGET ${TARGET} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/config.json ${CMAKE_OUTPUT_DIRECTORY_INTDIR}/config.json
 )
+
+install(TARGETS ${TARGET} RUNTIME DESTINATION .)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/config.json DESTINATION .)
+# 安装所依赖的dll（需要在vcvarsall.bat打开的环境下使用）
+set(APP "\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${TARGET}.exe")
+set(DIRS "${CMAKE_OUTPUT_INSTALL_INTDIR}")
+install(CODE "
+    include(BundleUtilities)
+    fixup_bundle(\"${APP}\"  \"\"  \"${DIRS}\")
+")

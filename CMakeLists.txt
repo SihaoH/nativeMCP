@@ -27,14 +27,6 @@ add_subdirectory(MCPServer)
 add_subdirectory(servers)
 add_subdirectory(host)
 
-# 安装所依赖的dll（需要在vcvarsall.bat打开的环境下使用）
-set(APP "\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/server.exe")
-set(DIRS "${CMAKE_OUTPUT_INSTALL_INTDIR}")
-install(CODE "
-    include(BundleUtilities)
-    fixup_bundle(\"${APP}\"  \"\"  \"${DIRS}\")
-   ")
-
 
 set (CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP ON)
 include(InstallRequiredSystemLibraries)
@@ -45,7 +37,7 @@ endif (CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
 # CPack 基本设置
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "nativeRAG Application")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "nativeMCP Application")
 set(CPACK_PACKAGE_VENDOR "SihaoH")
 
 # 指定打包 Release 版本

@@ -3,7 +3,7 @@
 
 int main(int argc, char* argv[])
 {
-    Logger::instance()->init("nativeMCP");
+    Logger::instance()->init("nativeMCP-Host");
 
     Host host;
     host.init();

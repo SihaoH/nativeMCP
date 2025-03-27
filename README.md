@@ -1,19 +1,28 @@
 # nativeMCP
 
 ## 概述
-这是一个由C++编写的MCP系统，包括MCP核心架构的host、client和server
+这是一个由C++编写的MCP系统，包括MCP核心架构的host、client和server；而host本身已经相当于是AI Agent，虽然目前只有命令行（但我觉得也不需要花哨界面）
+
+参考：https://modelcontextprotocol.io/introduction
 
 *server可用于其他支持MCP的软件，如Cursor*
 
 *client也支持MCP官方的servers，和Cursor同样的配置即可*
 
 ## 基本组成
+- MCPServer：遵循MCP的Server父类，相当于SDK，子类只需要继承以及按要求新增所需的方法即可；目前通信方式只支持stdio
+- servers：继承MCPServer后实现的一些具体server，可以直接使用；后续分支再更新更多的工具
+- host：宿主应用程序，连接LLM，根据配置加载MCPClient
+	- MCPClient：在host应用程序内部与服务器保持1:1连接，在LLM需要的时候调用MCPServer提供的工具
+	- ModelAdapter：连接LLM的适配层，目前实现是使用cpp-httplib对Ollama发起请求
+
+## 依赖库&外部程序
 - **Qt6.8**：字符串、Json处理，元对象机制（用于动态调用任意函数）
-- **cpp-httplib**：用于请求Ollama
+- **cpp-httplib**：用于请求Ollama或是其他在线大模型的api
 - **Ollama**：本地部署大模型的后端程序
 	- LLM 任意的大语言模型，用于自然语言的问答，例如DeepSeek、Qwen等
 
-## 编译依赖
+## 编译环境
 ### 编译工具链
 - CMake >= 3.30
 - Visual Studio 2022（勾选`使用C++进行桌面开发`）
@@ -65,10 +74,10 @@ cmake .. -G "Visual Studio 17 2022"
 ## 配置
 修改[config.json](./host/config.json)，可简单配置MCP Host的功能
 - model
-	- host：ollama的地址
-	- chat：生成对话的模型，推荐deepseek和qwen
+	- host：Ollama的地址
+	- chat：生成对话的模型，推荐deepseek或qwen
 - mcpServers
-	- server名称，可以随便填
+	- server名称（因为代码会判断冒号，所以不要使用冒号）
 		- command：在windows系统上必须都是`cmd`
 		- args：["/c"]第一个参数必须是`/c`，第二个参数看server的类型选择，exe直接是`exe的路径`，python程序则填`python`，Node.js则填`npx`，后面的参数再根据server的说明来填写
 
