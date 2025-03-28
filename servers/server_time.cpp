@@ -11,7 +11,7 @@
 ServerTime::ServerTime()
     : MCPServer()
 {
-    setName("mcp-cpp-time");
+    setName("mcp-server-time");
     setVersion("0.1.0");
 }
 

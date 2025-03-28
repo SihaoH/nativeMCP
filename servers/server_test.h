@@ -8,6 +8,7 @@ class ServerTest : public MCPServer
 public:
     ServerTest();
     ~ServerTest() = default;
+    void init(int argc, char* argv[]) override;
 
 public slots:
     QString getAvailableIP();
@@ -18,4 +19,10 @@ public slots:
 
     QString testMultiParams(const QVariant& c, const QVariant& b, const QVariant& a);
     MCPServer::ToolInfo testMultiParams$info();
+
+    QString testInitArg();
+    MCPServer::ToolInfo testInitArg$info();
+
+private:
+    QStringList initArgv;
 };

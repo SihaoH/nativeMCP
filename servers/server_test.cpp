@@ -9,8 +9,16 @@
 ServerTest::ServerTest()
     : MCPServer()
 {
-    setName("mcp-cpp-test");
+    setName("mcp-server-test");
     setVersion("0.1.0");
+    QThread::sleep(10);
+}
+
+void ServerTest::init(int argc, char* argv[])
+{
+    for (int i = 0; i < argc; ++i) {
+        initArgv.append(QString::fromLocal8Bit(argv[i]));
+    }
 }
 
 QString ServerTest::getAvailableIP()
@@ -73,6 +81,23 @@ MCPServer::ToolInfo ServerTest::testMultiParams$info()
         {"b", "string", "参数b，可以填入任意内容，测试成功会打印出来"},
         {"a", "string", "参数a，可以填入任意内容，测试成功会打印出来"}
     };
+    return info;
+}
+
+QString ServerTest::testInitArg()
+{
+    QJsonArray array;
+    for (const auto& arg : initArgv) {
+        array.append(arg);
+    }
+    return QJsonDocument(array).toJson(QJsonDocument::Indented);
+}
+
+MCPServer::ToolInfo ServerTest::testInitArg$info()
+{
+    MCPServer::ToolInfo info;
+    info.name = "testInitArg";
+    info.desc = "测试初始化参数，该工具会直接返回启动时传入的参数";
     return info;
 }
 

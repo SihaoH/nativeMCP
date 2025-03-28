@@ -15,7 +15,9 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "D:\\Projects\\C++\\nativeMCP\\build\\bin\\Debug\\server_test.exe"
+                "D:\\Projects\\C++\\nativeMCP\\build\\bin\\Debug\\server_test.exe",
+                "测试启动参数1",
+                "测试启动参数2"
             ]
         }
     }

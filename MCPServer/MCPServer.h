@@ -34,8 +34,9 @@ public slots:
 
 public:
     MCPServer(QObject *parent = nullptr);
-    ~MCPServer();
-    int run();
+    virtual ~MCPServer();
+    virtual void init(int argc, char* argv[]) {}
+    virtual int run();
 
 protected:
     void setName(const QString& name);
@@ -52,5 +53,6 @@ private:
     int main(int argc, char *argv[]) \
     { \
         MCPServer* server = new server_name(); \
+        server->init(argc, argv); \
         return server->run(); \
     }
