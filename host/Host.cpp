@@ -15,7 +15,7 @@ Host::Host(QObject *parent)
 
 void Host::init()
 {
-    LOG(info) << "MCP Host初始化";
+    LOG(info) << "MCP Host初始化...";
 
     QFile cfg_file("./config.json");
     if (!cfg_file.open(QIODevice::ReadOnly)) {
@@ -75,17 +75,26 @@ void Host::init()
 
 void Host::process(const QString& content)
 {
-    while (messageList.count() > 50) {
-        messageList.removeFirst();
-    }
     messageList.append(QJsonObject{
         {"role", "user"},
         {"content", content}
     });
 
-    auto tool_list = toolMap.values();
+    QJsonArray tools_array;
+    for (const auto& tool : toolMap.values()) {
+        auto tool_obj = QJsonDocument::fromJson(tool.toUtf8()).object();
+        QJsonObject converted_tool{
+            {"type", "function"},
+            {"function", QJsonObject{
+                {"name", tool_obj["name"]},
+                {"description", tool_obj["description"]},
+                {"parameters", tool_obj["inputSchema"]}
+            }}
+        };
+        tools_array.append(converted_tool);
+    }
     for (;;) {
-        QString response_str = ModelAdapter::instance()->chat(messageList, tool_list);
+        QString response_str = ModelAdapter::instance()->chat(messageList, tools_array);
         auto message_obj = QJsonDocument::fromJson(response_str.toUtf8()).object()["message"].toObject();
         
         auto resp_content = message_obj["content"].toString();

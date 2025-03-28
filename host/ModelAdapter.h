@@ -10,7 +10,7 @@ public:
     static ModelAdapter* instance();
     
     void init(const QString& host, const QString& chat_m);
-    QString chat(const QJsonArray& messages, const QStringList& tools);
+    QString chat(const QJsonArray& messages, const QJsonArray& tools);
 
 private:
     ModelAdapter();
