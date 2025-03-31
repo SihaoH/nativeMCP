@@ -129,11 +129,15 @@ void Host::process(const QString& content)
                     LOG(err) << "未找到对应的Client: " << client_name;
                     continue;
                 }
-                // 调用工具并获取结果
-                LOG(info) << QString("调用MCP工具%1(%2): ").arg(mix_name).arg(tool_args);
-                auto tool_result = client->callTool(tool_name, tool_args);
-                tool_result = QJsonDocument::fromJson(tool_result.toUtf8()).object()["content"].toArray()[0].toObject()["text"].toString();
-                LOG(info) << tool_result;
+
+                QString tool_result;
+                { // 调用工具并获取结果
+                    auto log_call = LOG(info);
+                    log_call << QString("调用MCP工具%1(%2): \n").arg(mix_name).arg(tool_args);
+                    tool_result = client->callTool(tool_name, tool_args);
+                    tool_result = QJsonDocument::fromJson(tool_result.toUtf8()).object()["content"].toArray()[0].toObject()["text"].toString();
+                    log_call << tool_result;
+                }
 
                 messageList.append(QJsonObject{
                     {"role", "tool"},
