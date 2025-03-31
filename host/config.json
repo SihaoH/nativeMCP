@@ -1,7 +1,8 @@
 {
-    "model": {
-        "host": "http://localhost:11434",
-        "chat": "qwen2.5:7b"
+    "api": {
+        "url": "http://localhost:11434/api/chat",
+        "model": "qwen2.5:7b"
+        "api_key": ""
     },
     "mcpServers":{
         "cpp-time": {
