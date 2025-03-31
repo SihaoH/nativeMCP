@@ -1,23 +1,25 @@
 {
-    "model": {
-        "host": "http://localhost:11434",
-        "chat": "qwen2.5:7b"
+    "api": {
+        "url": "http://localhost:11434/api/chat",
+        "model": "qwen2.5:14b",
+        "api_key": ""
     },
     "mcpServers":{
-        "cpp-time": {
+        "screen_parser": {
             "command": "cmd",
             "args": [
                 "/c",
-                "D:\\Projects\\C++\\nativeMCP\\build\\bin\\Debug\\server_time.exe"
+                "screen_parser.exe",
+                "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+                "qwen2.5-vl-72b-instruct",
+                "<api_key>"
             ]
         },
-        "server-test": {
+        "computer_use": {
             "command": "cmd",
             "args": [
                 "/c",
-                "D:\\Projects\\C++\\nativeMCP\\build\\bin\\Debug\\server_test.exe",
-                "测试启动参数1",
-                "测试启动参数2"
+                "computer_use.exe"
             ]
         }
     }

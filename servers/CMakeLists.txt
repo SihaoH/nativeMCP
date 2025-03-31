@@ -2,13 +2,22 @@ set(CMAKE_AUTOMOC ON)
 
 set(SERVER_LIST )
 
-# server_test
-add_executable(server_test server_test.h server_test.cpp)
-list(APPEND SERVER_LIST server_test)
+# screen_parser
+find_package(Qt6 REQUIRED COMPONENTS Gui)
+find_package(OpenSSL REQUIRED)
+find_package(httplib CONFIG REQUIRED)
+add_executable(screen_parser screen_parser.h screen_parser.cpp)
+target_link_libraries(screen_parser PRIVATE
+    Qt6::Gui
+    OpenSSL::SSL
+    OpenSSL::Crypto
+    httplib::httplib
+)
+list(APPEND SERVER_LIST screen_parser)
 
-# server_time
-add_executable(server_time server_time.h server_time.cpp)
-list(APPEND SERVER_LIST server_time)
+# computer_use
+add_executable(computer_use computer_use.h computer_use.cpp)
+list(APPEND SERVER_LIST computer_use)
 
 
 foreach(SERVER_TARGET ${SERVER_LIST})

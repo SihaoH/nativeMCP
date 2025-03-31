@@ -31,8 +31,8 @@ void Host::init()
 
     // 初始化模型配置
     auto cfg_obj = doc.object();
-    auto model_cfg = cfg_obj["model"].toObject();
-    ModelAdapter::instance()->init(model_cfg["host"].toString(), model_cfg["chat"].toString());
+    auto model_cfg = cfg_obj["api"].toObject();
+    ModelAdapter::instance()->init(model_cfg["url"].toString(), model_cfg["model"].toString(), model_cfg["api_key"].toString());
 
     // 初始化MCP servers配置
     auto mcp_servers = cfg_obj["mcpServers"].toObject();
@@ -94,7 +94,10 @@ void Host::process(const QString& content)
         tools_array.append(converted_tool);
     }
     for (;;) {
-        QString response_str = ModelAdapter::instance()->chat(messageList, tools_array);
+        auto response_str = ModelAdapter::instance()->chat(messageList, tools_array);
+        if (response_str.isEmpty()) {
+            return;
+        }
         auto message_obj = QJsonDocument::fromJson(response_str.toUtf8()).object()["message"].toObject();
         
         auto resp_content = message_obj["content"].toString();
@@ -127,9 +130,10 @@ void Host::process(const QString& content)
                     continue;
                 }
                 // 调用工具并获取结果
+                LOG(info) << QString("调用MCP工具%1(%2): ").arg(mix_name).arg(tool_args);
                 auto tool_result = client->callTool(tool_name, tool_args);
                 tool_result = QJsonDocument::fromJson(tool_result.toUtf8()).object()["content"].toArray()[0].toObject()["text"].toString();
-                LOG(info) << QString("调用MCP工具[%1]: ").arg(mix_name) << tool_result;
+                LOG(info) << tool_result;
 
                 messageList.append(QJsonObject{
                     {"role", "tool"},

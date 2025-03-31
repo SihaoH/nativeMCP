@@ -17,15 +17,20 @@ add_executable(${TARGET} ${SOURCES})
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(spdlog CONFIG REQUIRED)
+find_package(OpenSSL REQUIRED)
 find_package(httplib CONFIG REQUIRED)
 
 target_link_libraries(${TARGET}
     PUBLIC
     Qt6::Core
     PRIVATE
+    OpenSSL::SSL
+    OpenSSL::Crypto
     httplib::httplib
     spdlog::spdlog_header_only
 )
+
+add_definitions(-DCPPHTTPLIB_OPENSSL_SUPPORT)
 
 # 修改从VS调试时的工作目录路径
 set_target_properties(${TARGET} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_OUTPUT_DIRECTORY_INTDIR})

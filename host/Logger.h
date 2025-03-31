@@ -8,7 +8,9 @@ class LogStream
 {
 public:
     LogStream(int t, const char* file, int line);
+    LogStream& operator<< (const char* str);
     LogStream& operator<< (const QString& str);
+    LogStream& operator<< (const std::string& str);
     ~LogStream();
 private:
     int type;

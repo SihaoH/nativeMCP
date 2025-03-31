@@ -2,6 +2,7 @@
     "name": "native-mcp",
     "dependencies": [
         "spdlog",
+        "openssl",
         "cpp-httplib"
     ]
 }
