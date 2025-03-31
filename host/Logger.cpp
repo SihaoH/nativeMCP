@@ -9,7 +9,19 @@ LogStream::LogStream(int t, const char* file, int line)
     type = t;
 }
 
+LogStream& LogStream::operator<<(const char* str)
+{
+    wholeStr.append(str);
+    return *this;
+}
+
 LogStream& LogStream::operator<<(const QString& str)
+{
+    wholeStr.append(str);
+    return *this;
+}
+
+LogStream& LogStream::operator<<(const std::string& str)
 {
     wholeStr.append(str);
     return *this;

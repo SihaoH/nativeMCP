@@ -9,7 +9,7 @@ cmake_path(GET VCPKG_ROOT PARENT_PATH VCPKG_ROOT)
 set(CMAKE_TOOLCHAIN_FILE ${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake)
 
 set(PROJ_NAME nativeMCP)
-project(${PROJ_NAME} VERSION 0.1.1)
+project(${PROJ_NAME} VERSION 0.1.2)
 
 # 启用解决方案文件夹
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
