@@ -45,7 +45,7 @@ protected:
     bool lastCallError() const;
 
 private:
-    class MCPServerPrivate* p = nullptr;
+    class MCPServerPrivate* d = nullptr;
 };
 
 // 每个服务器都是一个独立进程，需要定义一个main函数

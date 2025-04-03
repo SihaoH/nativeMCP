@@ -158,14 +158,14 @@ public:
 
 MCPServer::MCPServer(QObject *parent)
     : QObject(parent)
-    , p(new MCPServerPrivate)
+    , d(new MCPServerPrivate)
 {
-    p->d = this;
+    d->d = this;
 }
 
 MCPServer::~MCPServer()
 {
-    delete p;
+    delete d;
 }
 
 int MCPServer::run()
@@ -177,7 +177,7 @@ int MCPServer::run()
     while (!in.atEnd()) {
         QString line = in.readLine();
         if (!line.isEmpty()) {
-            auto response = p->handleRequest(line);
+            auto response = d->handleRequest(line);
             if (!response.isEmpty()) {
                 QTextStream(stdout) << response << Qt::endl;
             }
@@ -188,20 +188,20 @@ int MCPServer::run()
 
 void MCPServer::setName(const QString& name)
 {
-    p->name = name;
+    d->name = name;
 }
 
 void MCPServer::setVersion(const QString& version)
 {
-    p->version = version;
+    d->version = version;
 }
 
 void MCPServer::setLastCallError(bool error)
 {
-    p->lastCallErr = error;
+    d->lastCallErr = error;
 }
 
 bool MCPServer::lastCallError() const
 {
-    return p->lastCallErr;
+    return d->lastCallErr;
 }
