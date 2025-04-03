@@ -69,13 +69,14 @@ cd build
 cmake .. -G "Visual Studio 17 2022"
 ```
 
-最后打开build/nativeMCP.sln进行编译和调试
+最后打开build/nativeMCP.sln进行编译和调试（注意先将host设为启动项，或者要调试server的话则将对应的server设为启动项）
 
 ## 配置
 修改[config.json](./host/config.json)，可简单配置MCP Host的功能
-- model
-	- host：Ollama的地址
-	- chat：生成对话的模型，推荐deepseek或qwen
+- api
+	- url：api的完整url
+	- model：生成对话的模型，推荐deepseek或qwen
+	- api_key：如果是本地部署的则为空
 - mcpServers
 	- server名称（因为代码会判断冒号，所以不要使用冒号）
 		- command：在windows系统上必须都是`cmd`
